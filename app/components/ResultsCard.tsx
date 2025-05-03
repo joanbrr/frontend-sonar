@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 
 interface ResultsCardProps {
   title: string;
@@ -9,6 +9,8 @@ interface ResultsCardProps {
   endTime: string;
   schedule: string;
   bgColor?: string;
+  tags?: string[];
+  renderTags?: (tags: string[], color: string) => JSX.Element;
 }
 
 export default function ResultsCard({ 
@@ -18,7 +20,9 @@ export default function ResultsCard({
   startTime, 
   endTime, 
   schedule,
-  bgColor = "bg-neutral-800"
+  bgColor = "bg-neutral-800",
+  tags = [],
+  renderTags
 }: ResultsCardProps) {
   
   const formatTimeDisplay = () => {
@@ -40,25 +44,36 @@ export default function ResultsCard({
   const timeInfo = formatTimeDisplay();
 
   return (
-    <View className={`${bgColor} rounded-xl shadow-lg p-4 mb-4 flex-row`}>
-      <View className="w-1/4 mr-4">
-        <Image 
-          source={{ uri: imageUri }} 
-          className="aspect-square rounded-lg" 
-          resizeMode="cover" 
-        />
-      </View>
-      
-      <View className="flex-1">
-        <Text className="text-xl font-semibold text-white">{title}</Text>
-        <Text className="text-neutral-300 mt-2" numberOfLines={3}>{description}</Text>
+    <View className={`${bgColor} rounded-xl shadow-lg p-4 mb-4`}>
+      <View className="flex-row">
+        {/* Image Section */}
+        <View className="w-1/4 mr-4">
+          <Image 
+            source={{ uri: imageUri }} 
+            className="aspect-square rounded-lg" 
+            resizeMode="cover" 
+          />
+        </View>
         
-        <View className="flex flex-row gap-3 mt-4">
-          <Text className="text-white text-sm font-medium">{timeInfo}</Text>
-          <Text className="text-white text-sm font-medium">-</Text>
-          <Text className="text-white text-sm font-medium">{schedule}</Text>
+        {/* Content Section */}
+        <View className="flex-1">
+          <Text className="text-xl font-semibold text-white">{title}</Text>
+          <Text className="text-neutral-300 mt-2" numberOfLines={3}>{description}</Text>
+          
+          <View className="flex flex-row gap-3 mt-4">
+            <Text className="text-white text-sm font-medium">{timeInfo}</Text>
+            <Text className="text-white text-sm font-medium">-</Text>
+            <Text className="text-white text-sm font-medium">{schedule}</Text>
+          </View>
         </View>
       </View>
+
+      {/* Tags Section - Only rendered if tags exist and renderTags function is provided */}
+      {tags?.length > 0 && renderTags && (
+        <View className="mt-3">
+          {renderTags(tags, bgColor)}
+        </View>
+      )}
     </View>
   );
 };

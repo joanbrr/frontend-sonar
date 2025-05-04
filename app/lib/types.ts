@@ -33,4 +33,5 @@ export interface Result {
   schedules: {
     title: string;
   };
+  tags: string[];
 }

@@ -11,6 +11,14 @@ interface ResultsCardProps {
   bgColor?: string;
   tags?: string[];
   renderTags?: (tags: string[], color: string) => JSX.Element;
+  cardStyles?: {
+    borderRadius: number;
+    padding: number;
+    marginBottom: number;
+    shadowOpacity: number;
+    shadowRadius: number;
+    shadowOffset: { width: number; height: number };
+  };
 }
 
 export default function ResultsCard({ 

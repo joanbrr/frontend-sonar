@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import ResultsCard from '@/app/components/ResultsCard';
 import { Result } from '@/app/lib/types';
 import { getResults } from '@/app/lib/api';
-import { getColors } from 'react-native-image-colors'
+// import { getColors } from 'react-native-image-colors'
 
 // Moved card styling to a separate object for better maintainability
 const cardStyles = {
@@ -39,27 +39,14 @@ export default function ViewResults() {
       const colorsMap: {[key: number]: string} = {};
       await Promise.all(data.map(async (result) => {
         if (result.image_uri) {
-          try {
-            const colors = await getColors(result.image_uri);
-            if (colors.platform === 'android') {
-              console.log(`Android dominant color: ${colors.dominant}`);
-            } else if (colors.platform === 'ios') {
-              console.log(`iOS background color: ${colors.background}`);
-            }
-            switch (colors.platform) {
-              case 'android':
-                colorsMap[result.id] = colors.dominant || '#6b7280'; // Fallback
-                break;
-              case 'ios':
-                colorsMap[result.id] = colors.background || '#6b7280'; // Fallback
-                break;
-              default:
-                colorsMap[result.id] = '#6b7280'; // Fallback
-            }
-          } catch (error) {
-            colorsMap[result.id] = '#6b7280'; // Fallback if color extraction fails
-          }
+          colorsMap[result.id] = '#6b7280'; // Fallback
         }
+        else {
+          colorsMap[result.id] = '#6b7280'; // Fallback
+        }
+        // Uncomment the following line when using the actual image colors library
+        // const colors = await getColors(result.image_uri, { fallback: '#6b7280' });
+        // colorsMap[result.id] = colors.dominant || '#6b7280'; // Fallback 
       }));
       
       setCardColors(colorsMap);
